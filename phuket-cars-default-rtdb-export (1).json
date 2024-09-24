@@ -1,0 +1,152 @@
+{
+  "cars": [
+    {
+      "carUrl": "fiesta",
+      "id": 1,
+      "imgUrl": "img/fiesta.jpg",
+      "name": "Ford Fiesta (2014)",
+      "notSeasonPrice": 900,
+      "seasonPrice": 800
+    },
+    {
+      "id": 2,
+      "imgUrl": "img/aveo.jpg",
+      "name": "Chevrolet Aveo (2014)",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 3,
+      "imgUrl": "img/ativ.jpg",
+      "name": "Toyota Yaris Ativ",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 4,
+      "imgUrl": "img/yaris.jpg",
+      "name": "Toyota Yaris",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 5,
+      "imgUrl": "img/jazz.jpg",
+      "name": "Honda Jazz",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 6,
+      "imgUrl": "img/vios.jpg",
+      "name": "Toyota Vios",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 7,
+      "imgUrl": "img/city-hb.jpg",
+      "name": "Honda City Hathback, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 8,
+      "imgUrl": "img/city.jpg",
+      "name": "Honda City",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 9,
+      "imgUrl": "img/yaris-2023.jpg",
+      "name": "Toyota Yaris, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 10,
+      "imgUrl": "img/vios-2023.jpg",
+      "name": "Toyota Vios, 2022",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 11,
+      "imgUrl": "img/ativ-2023.jpg",
+      "name": "Toyota Yaris Ativ, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 12,
+      "imgUrl": "img/city-2023.jpg",
+      "name": "Honda City, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 13,
+      "imgUrl": "img/almera-2023.jpg",
+      "name": "Nissan Almera, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 14,
+      "imgUrl": "img/mazda2.jpg",
+      "name": "Mazda 2, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 15,
+      "imgUrl": "img/mirage.jpg",
+      "name": "Toyota Vios, 2022",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 16,
+      "imgUrl": "img/mg5-2.jpg",
+      "name": "MG 5",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 17,
+      "imgUrl": "img/xpander.jpg",
+      "name": "Mitsubishi Xpander, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 18,
+      "imgUrl": "img/veloz.jpg",
+      "name": "Toyota Veloz, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 19,
+      "imgUrl": "img/fortuner.jpg",
+      "name": "Toyota Fortuner, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 20,
+      "imgUrl": "img/pajero.jpg",
+      "name": "Mitsubishi Pajero, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    },
+    {
+      "id": 21,
+      "imgUrl": "img/cross.jpg",
+      "name": "Toyota Cross, 2023",
+      "notSeasonPrice": 800,
+      "seasonPrice": 700
+    }
+  ]
+}

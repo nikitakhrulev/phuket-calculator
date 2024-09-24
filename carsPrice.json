@@ -1,0 +1,103 @@
+{
+    "cars": [
+      {
+        "id": 1,
+        "name": "Ford Fiesta (2014)",
+        "seasonPrice": 800,
+        "notSeasonPrice": 900,
+        "imgUrl": "img/fiest.jpg"
+
+      },
+      {
+        "id": 2,
+        "name": "Chevrolet Aveo (2014)",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 3,
+        "name": "Toyota Yaris Ativ",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 4,
+        "name": "Toyota Yaris",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 5,
+        "name": "Honda Jazz",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 6,
+        "name": "Toyota Vios",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 7,
+        "name": "Honda City Hathback, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 8,
+        "name": "Honda City",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 9,
+        "name": "Toyota Yaris, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 10,
+        "name": "Toyota Vios, 2022",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 11,
+        "name": "Toyota Yaris Ativ, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 12,
+        "name": "Honda City, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 13,
+        "name": "Nissan Almera, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 14,
+        "name": "Mazda 2, 2023",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 15,
+        "name": "Toyota Vios, 2022",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      },
+      {
+        "id": 16,
+        "name": "Toyota Vios, 2022",
+        "seasonPrice": 700,
+        "notSeasonPrice": 800
+      }
+    ]
+  }
+  
