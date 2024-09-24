@@ -2736,6 +2736,20 @@ body.popup-open {
 .image-desciption__mobile {
 	display: none;
 }
+.days-count__mobile {
+	display: none;
+	height: 21px;
+    position: absolute;
+    /* margin: 0 auto; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-30px, 10px);
+    background: rgba(244, 247, 252, 1);
+    width: 61px;
+    font-size: 12px;
+    border-radius: 30px;
+    color: rgba(120, 124, 127, 1);
+}
 @media only screen and (max-width: 768px) {
 	.calculator__content {
 		padding: 17px 16px 10px;

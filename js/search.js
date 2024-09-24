@@ -1,62 +1,119 @@
 let rentDays = 0;
 const totalPriceLine = document.querySelectorAll('.total-price');
-const calculatorForm = document.querySelector('.calculator__form');
+const calculatorForm = document.querySelector('.calculator__desktop');
+const calculatorMobileForm = document.querySelector('.calculator__mobile');
 const rooms = document.querySelector('.rooms'); // Выбираем первый элемент с классом .rooms
 const carListItems = rooms ? rooms.querySelectorAll('.entry') : null; // Затем выбираем .entry внутри .rooms, если он существует
-calculatorForm.addEventListener('submit', changePrices);
 
-const picker = new easepick.create({
-    element: document.getElementById('datepicker-mobile'),
-    css: [
-        'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
-        'https://easepick.com/css/demo_hotelcal.css',
-    ],
-    zIndex: 99999,
-    lang: "ru-RU",
-    plugins: ['RangePlugin'],
-    RangePlugin: {
-        tooltipNumber(num) {
-            return num - 1; // Подсказка для количества ночей
-        },
-        locale: {
-            one: 'ночь',
-            other: 'ночей',
-        },
-    },
-    setup(picker) {
-        picker.on('select', (evt) => {
-            const startDate = evt.detail.start;
-            const endDate = evt.detail.end;
+if (window.innerWidth <= 768) {
+    calculatorMobileForm.addEventListener('submit', changePrices)
+} else {
+    calculatorForm.addEventListener('submit', changePrices);
+}
 
-            // Массив месяцев на русском языке
-            const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+document.addEventListener('DOMContentLoaded', setCalendar)
 
-            // Преобразуем начальную и конечную даты
-            const startDay = startDate.format('D'); // день начала
-            const endDay = endDate.format('D'); // день конца
-
-            const startMonth = months[startDate.format('M') - 1]; // месяц начала
-            const endMonth = months[endDate.format('M') - 1]; // месяц конца
-
-            const year = startDate.format('YYYY'); // год
-
-            // Проверяем, если месяцы совпадают, выводим в одном формате, если нет — в другом
-            let dateRangeText;
-            if (startMonth === endMonth) {
-                dateRangeText = `${startDay}-${endDay} ${startMonth} ${year}`;
-            } else {
-                dateRangeText = `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`;
+function setCalendar() {
+    if (window.innerWidth <= 768) {
+        const picker = new easepick.create({
+            element: document.getElementById('datepicker-mobile'),
+            css: [
+                'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                'https://easepick.com/css/demo_hotelcal.css',
+            ],
+            zIndex: 99999,
+            lang: "ru-RU",
+            plugins: ['RangePlugin'],
+            RangePlugin: {
+                tooltipNumber(num) {
+                    return num - 1; // Подсказка для количества ночей
+                },
+                locale: {
+                    one: 'ночь',
+                    other: 'ночей',
+                },
+            },
+            setup(picker) {
+                picker.on('select', (evt) => {
+                    const startDate = evt.detail.start;
+                    const endDate = evt.detail.end;
+        
+                    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+        
+                    const startDay = startDate.format('D'); 
+                    const startMonth = months[startDate.format('M') - 1]; 
+        
+                    const endDay = endDate.format('D'); 
+                    const endMonth = months[endDate.format('M') - 1]; 
+        
+                    const pickupDate = document.querySelector('.datepicker-date-pickup input');
+                    const returnDate = document.querySelector('.datepicker-date-return input');
+                    const daysCount = document.querySelector('.days-count__mobile');
+                    // const daysCount = document.querySelector('.days-count__mobile');
+                    pickupDate.style.color = '#000';
+                    returnDate.style.color = '#000';
+                    daysCount.style.display = 'block';
+                    pickupDate.value = `${startDay} ${startMonth}`;
+                    returnDate.value = `${endDay} ${endMonth}`;
+        
+                    const days = evt.detail.end.diff(evt.detail.start, 'days');
+                    daysCount.textContent = `${days} ${days === 1 ? 'день' : 'дней'}`;
+                    rentDays = days;
+                });
             }
-
-            // Устанавливаем этот текст в поле даты (input)
-            document.getElementById('datepicker').value = dateRangeText;
-
-            // Дополнительно обновляем текст с количеством дней
-            const days = evt.detail.end.diff(evt.detail.start, 'days');
-            document.getElementById('days-count').textContent = `${days} ${days === 1 ? 'день' : 'дней'}`;
+        });
+    } else {
+        const picker = new easepick.create({
+            element: document.getElementById('datepicker'),
+            css: [
+                'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+                'https://easepick.com/css/demo_hotelcal.css',
+            ],
+            zIndex: 99999,
+            lang: "ru-RU",
+            plugins: ['RangePlugin'],
+            RangePlugin: {
+                tooltipNumber(num) {
+                    return num - 1; 
+                },
+                locale: {
+                    one: 'ночь',
+                    other: 'ночей',
+                },
+            },
+            setup(picker) {
+                picker.on('select', (evt) => {
+                    const startDate = evt.detail.start;
+                    const endDate = evt.detail.end;
+        
+                    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+        
+                    const startDay = startDate.format('D'); 
+                    const endDay = endDate.format('D');
+        
+                    const startMonth = months[startDate.format('M') - 1]; 
+                    const endMonth = months[endDate.format('M') - 1]; 
+        
+                    const year = startDate.format('YYYY'); 
+        
+                    let dateRangeText;
+                    if (startMonth === endMonth) {
+                        dateRangeText = `${startDay}-${endDay} ${startMonth} ${year}`;
+                    } else {
+                        dateRangeText = `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`;
+                    }
+        
+                    document.getElementById('datepicker').value = dateRangeText;
+        
+                    const days = evt.detail.end.diff(evt.detail.start, 'days');
+                    document.getElementById('days-count').textContent = `${days} ${days === 1 ? 'день' : 'дней'}`;
+                    rentDays = days;
+                });
+            }
         });
     }
-});
+}
+
 
 
 
@@ -122,7 +179,7 @@ function renderCars() {
                     <div class="content content-finder">
                         <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
                         <p class="initial-price"><span>от ${car.notSeasonPrice}฿</span>/сутки</p>
-                        <p class="total-price"><span></span>800฿ итого</p>
+                        <p class="total-price"><span></span>${parseInt(rentDays * car.seasonPrice)}฿ итого</p>
                         <button class="button open-popup">Оставить заявку</button>
                     </div>
                 </div>
