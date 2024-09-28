@@ -1,9 +1,26 @@
 let rentDays = 0;
+let rentMonth = '';
+let seasonType = '';
+let deliveryPrice = 0;
+const seasonByMonth = {
+    'января': { type: 'extremeSeason', minDays: { standard: 7, premium: 10 } },
+    'февраля': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
+    'марта': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
+    'апреля': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'мая': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'июня': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'июля': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'августа': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'сентября': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'октября': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
+    'ноября': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
+    'декабря': { type: 'extremeSeason', minDays: { standard: 7, premium: 10 } }
+};
 const totalPriceLine = document.querySelectorAll('.total-price');
 const calculatorForm = document.querySelector('.calculator__desktop');
 const calculatorMobileForm = document.querySelector('.calculator__mobile');
-const rooms = document.querySelector('.rooms'); // Выбираем первый элемент с классом .rooms
-const carListItems = rooms ? rooms.querySelectorAll('.entry') : null; // Затем выбираем .entry внутри .rooms, если он существует
+const rooms = document.querySelector('.rooms'); 
+const carListItems = rooms ? rooms.querySelectorAll('.entry') : null; 
 
 if (window.innerWidth <= 768) {
     calculatorMobileForm.addEventListener('submit', changePrices)
@@ -26,7 +43,7 @@ function setCalendar() {
             plugins: ['RangePlugin'],
             RangePlugin: {
                 tooltipNumber(num) {
-                    return num - 1; // Подсказка для количества ночей
+                    return num - 1; 
                 },
                 locale: {
                     one: 'ночь',
@@ -42,9 +59,10 @@ function setCalendar() {
         
                     const startDay = startDate.format('D'); 
                     const startMonth = months[startDate.format('M') - 1]; 
-        
+                    console.log(startMonth)
                     const endDay = endDate.format('D'); 
-                    const endMonth = months[endDate.format('M') - 1]; 
+                    const endMonth = months[endDate.format('M') - 1];
+                    seasonType = seasonByMonth[startMonth].type;
         
                     const pickupDate = document.querySelector('.datepicker-date-pickup input');
                     const returnDate = document.querySelector('.datepicker-date-return input');
@@ -93,7 +111,9 @@ function setCalendar() {
         
                     const startMonth = months[startDate.format('M') - 1]; 
                     const endMonth = months[endDate.format('M') - 1]; 
-        
+                    console.log(seasonByMonth[startMonth])
+                    seasonType = seasonByMonth[startMonth].type;
+                    console.log(seasonType)
                     const year = startDate.format('YYYY'); 
         
                     let dateRangeText;
@@ -135,19 +155,22 @@ function changePrices(evt) {
     .then(response => response.json())
     .then(data => {
         if (data.cars) {
+            console.log(data.cars)
             data.cars.forEach(car => {
                 const carObject = {
                     id: car.id,
                     name: car.name,
-                    seasonPrice: car.seasonPrice,
-                    notSeasonPrice: car.notSeasonPrice,
+                    lowSeasonPrice: car. lowSeasonPrice,
+                    highSeasonPrice: car.highSeasonPrice,
+                    extremeSeasonPrice: car.extremeSeasonPrice,
                     carUrl: car.carUrl,
-                    imgUrl: car.imgUrl
+                    imgUrl: car.imgUrl,
+                    category: car.category  
                 };
                 price.push(carObject);
             });
-
             renderCars(); // Отрисовываем карточки с новыми данными
+
         }
 
         // Удаляем предыдущие карточки
@@ -168,26 +191,76 @@ function changePrices(evt) {
 
 function renderCars() {
     const cols = document.querySelectorAll('.row .col');
-    console.log(price)
+    console.log(price);
+    //pickup
+    let selectPickup;
+    let selectReturn;
+    
+    if (window.innerWidth <= 768) {
+        selectPickup = document.getElementById('pickup');
+        selectReturn = document.getElementById('return');
+    } else {
+        selectPickup = document.getElementById('pickup-desk');
+        selectReturn = document.getElementById('return-desk');
+    }
+    
+    // Получаем выбранные опции и их data-value
+    const selectedOptionPickup = selectPickup.options[selectPickup.selectedIndex];
+    const dataValuePickup = parseInt(selectedOptionPickup.getAttribute('data-value'));
+    
+    const selectedOptionReturn = selectReturn.options[selectReturn.selectedIndex];
+    const dataValueReturn = parseInt(selectedOptionReturn.getAttribute('data-value'));
+    
+    // Выводим значения в консоль
+    console.log('Pickup data-value:', dataValuePickup);
+    console.log('Return data-value:', dataValueReturn);
+    
+    //total delivery
 
-    cols.forEach((col, index) => {
-        if (index < price.length) { 
-            const car = price[index]; 
-            const markup = `
-                <div class="entry">
-                    <a href="/${car.carUrl}"><img src="${car.imgUrl}"></a>
-                    <div class="content content-finder">
-                        <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
-                        <p class="initial-price"><span>от ${car.notSeasonPrice}฿</span>/сутки</p>
-                        <p class="total-price"><span></span>${parseInt(rentDays * car.seasonPrice)}฿ итого</p>
-                        <button class="button open-popup">Оставить заявку</button>
-                    </div>
+    // Удаляем предыдущие карточки
+    cols.forEach(col => {
+        col.innerHTML = '';
+    });
+
+    price.forEach((car, index) => {
+        const colIndex = index % cols.length; // Вычисляем индекс колонки
+        const col = cols[colIndex]; // Получаем колонку
+         deliveryPrice = dataValuePickup + dataValueReturn;
+        const markup = `
+            <div class="entry">
+                <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
+                <div class="content content-finder">
+                    <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
+                    <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
+                    <p class="total-price"><span></span>${parseInt(seasonType === 'lowSeason' ? car.lowSeasonPrice * rentDays : seasonType === 'highSeason' ? car.highSeasonPrice * rentDays : seasonType === 'extremeSeason' ? rentDays * car.extremeSeasonPrice : 0) + deliveryPrice}฿ итого</p>
+                    <button class="button open-popup">Оставить заявку</button>
                 </div>
-            `;
-            col.innerHTML = markup; 
-        }
+            </div>
+        `;
+        
+        col.innerHTML += markup; // Добавляем карточку к колонке
     });
 }
+// Получаем элемент select
+const selectElement = document.getElementById('pickup');
+
+// Добавляем обработчик события изменения
+selectElement.addEventListener('change', function() {
+    // Получаем выбранный option
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    
+    // Получаем значение атрибута data-value
+    const dataValue = selectedOption.getAttribute('data-value');
+
+    // Выводим значение в консоль или сохраняем в переменную
+    console.log(dataValue);
+    // Можно сохранить в переменную
+    // let myDataValue = dataValue;
+});
+
+
+
+
 
 //moveTo
 const moveTo = new MoveTo();
