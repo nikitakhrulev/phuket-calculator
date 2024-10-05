@@ -2,14 +2,6 @@ let rentDays = 0;
 let rentMonth = '';
 let seasonType = '';
 let deliveryPrice = 0;
-let today = new Date();  
-let defaultEndDate = new Date(); 
-let currentDay = 0;
-let finalDay = 0;
-let daysInCurrentMonth = 0;
-let currentMonth = '';
-let currentDayNumber = 0;
-
 const seasonByMonth = {
     'января': { type: 'extremeSeason', minDays: { standard: 7, premium: 10 } },
     'февраля': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
@@ -22,9 +14,8 @@ const seasonByMonth = {
     'сентября': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
     'октября': { type: 'lowSeason', minDays: { standard: 3, premium: 3 } },
     'ноября': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
-    'декабря': { minDays: { standard: 7, premium: 10 } }
+    'декабря': { type: 'extremeSeason', minDays: { standard: 7, premium: 10 } }
 };
-
 const totalPriceLine = document.querySelectorAll('.total-price');
 const calculatorForm = document.querySelector('.calculator__desktop');
 const calculatorMobileForm = document.querySelector('.calculator__mobile');
@@ -32,27 +23,29 @@ const rooms = document.querySelector('.rooms');
 const carListItems = rooms ? rooms.querySelectorAll('.entry') : null; 
 
 if (window.innerWidth <= 768) {
-    calculatorMobileForm.addEventListener('submit', changePrices);
+    calculatorMobileForm.addEventListener('submit', changePrices)
 } else {
     calculatorForm.addEventListener('submit', changePrices);
 }
 
-document.addEventListener('DOMContentLoaded', setCalendar);
+document.addEventListener('DOMContentLoaded', setCalendar)
 
 function setCalendar() {
-    today = new Date(); 
-    defaultEndDate = new Date();
-    defaultEndDate.setDate(today.getDate() + 14);  
+    // Вычисляем сегодняшнюю дату и дату через 14 дней
+    const today = new Date();
+    const defaultEndDate = new Date();
+    defaultEndDate.setDate(today.getDate() + 14); // Добавляем 14 дней к сегодняшней дате
 
     const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+    // Форматирование дат для отображения
     const startDay = today.getDate();
     const startMonth = months[today.getMonth()];
     const endDay = defaultEndDate.getDate();
     const endMonth = months[defaultEndDate.getMonth()];
     const year = today.getFullYear();
-    daysInCurrentMonth = new Date(year, today.getMonth() + 1, 0).getDate();
-    console.log(daysInCurrentMonth)
-    const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24)) + 1;  
+
+    const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24)) + 1; // Количество дней аренды
 
     if (window.innerWidth <= 768) {
         const picker = new easepick.create({
@@ -74,6 +67,7 @@ function setCalendar() {
                 },
             },
             setup(picker) {
+                // Устанавливаем начальные даты при загрузке
                 picker.setDateRange(today, defaultEndDate);
 
                 const pickupDate = document.querySelector('.datepicker-date-pickup input');
@@ -87,30 +81,18 @@ function setCalendar() {
                 returnDate.value = `${endDay} ${endMonth}`;
                 daysCount.textContent = `${days} дней`;
                 rentDays = days;
+
                 picker.on('select', (evt) => {
                     const startDate = evt.detail.start;
                     const endDate = evt.detail.end;
 
                     const startDay = startDate.getDate();
-                    currentDay = startDay;
-                    console.log(currentDay)
                     const startMonth = months[startDate.getMonth()];
-                    console.log(startMonth)
                     const endDay = endDate.getDate();
-                    finalDay = endDay;
-                    console.log(finalDay)
                     const endMonth = months[endDate.getMonth()];
 
-                    if (startMonth === 'декабря') {
-                        if (startDay >= 20) {
-                            seasonType = 'extremeSeason'; // С 20 декабря и позже
-                        } else {
-                            seasonType = 'highSeason'; // До 20 декабря
-                        }
-                    } else {
-                        seasonType = seasonByMonth[startMonth].type; // Для других месяцев
-                    }
-                    
+                    seasonType = seasonByMonth[startMonth].type;
+
                     pickupDate.value = `${startDay} ${startMonth}`;
                     returnDate.value = `${endDay} ${endMonth}`;
 
@@ -140,6 +122,7 @@ function setCalendar() {
                 },
             },
             setup(picker) {
+                // Устанавливаем начальные даты при загрузке
                 picker.setDateRange(today, defaultEndDate);
 
                 let dateRangeText;
@@ -151,46 +134,18 @@ function setCalendar() {
 
                 document.getElementById('datepicker').value = dateRangeText;
                 document.getElementById('days-count').textContent = `${days} дней`;
-                currentMonth = months[today.getMonth()];
-                console.log(currentMonth)
-                currentDayNumber = today.getDay();
-                console.log(currentDayNumber)
                 rentDays = days;
-                if (startMonth === 'декабря') {
-                    if (startDay >= 20) {
-                        seasonType = 'extremeSeason'; // С 20 декабря и позже
-                    } else {
-                        seasonType = 'highSeason'; // До 20 декабря
-                    }
-                } else {
-                    seasonType = seasonByMonth[startMonth].type; // Для других месяцев
-                }
-                console.log(seasonType)
-                
+
                 picker.on('select', (evt) => {
                     const startDate = evt.detail.start;
                     const endDate = evt.detail.end;
 
                     const startDay = startDate.getDate();
-                    currentDay = startDay;
                     const endDay = endDate.getDate();
-                    finalDay = endDay;
                     const startMonth = months[startDate.getMonth()];
-                    console.log(startMonth)
                     const endMonth = months[endDate.getMonth()];
                     const year = startDate.getFullYear();
-                    if (startMonth === 'декабря') {
-                        if (startDay >= 20) {
-                            seasonType = 'extremeSeason'; // С 20 декабря и позже
-                        } else {
-                            seasonType = 'highSeason'; // До 20 декабря
-                        }
-                    } else {
-                        seasonType = seasonByMonth[startMonth].type; // Для других месяцев
-                    }
-                    console.log(seasonType)
-                    daysInCurrentMonth = new Date(year, startDate.getMonth() + 1, 0).getDate();
-                    console.log(daysInCurrentMonth)
+
                     let dateRangeText;
                     if (startMonth === endMonth) {
                         dateRangeText = `${startDay}-${endDay} ${startMonth} ${year}`;
@@ -209,14 +164,20 @@ function setCalendar() {
     }
 }
 
+
+
+
 let price = [];
 
 function changePrices(evt) {
     evt.preventDefault();
     price = [];
+
+    // Находим прелоудер
     const preloader = document.querySelector('.preloader');
     const preloaderOverlay = document.querySelector('.preloader-overlay');
 
+    // Показать прелоудер, убираем класс hidden
     preloader.classList.remove('hidden');
     preloaderOverlay.classList.remove('hidden');
     
@@ -224,44 +185,47 @@ function changePrices(evt) {
     .then(response => response.json())
     .then(data => {
         if (data.cars) {
+            console.log(data.cars)
             data.cars.forEach(car => {
                 const carObject = {
                     id: car.id,
                     name: car.name,
-                    lowSeasonPrice: car.lowSeasonPrice,
+                    lowSeasonPrice: car. lowSeasonPrice,
                     highSeasonPrice: car.highSeasonPrice,
                     extremeSeasonPrice: car.extremeSeasonPrice,
                     carUrl: car.carUrl,
                     imgUrl: car.imgUrl,
-                    category: car.category, 
-                    lowMonthPrice: car.lowMonthPrice,
-                    highMonthPrice: car.highMonthPrice,
-                    extremeMonthPrice: car.extremeMonthPrice,
+                    category: car.category  
                 };
                 price.push(carObject);
             });
-            renderCars(); 
+            renderCars(); // Отрисовываем карточки с новыми данными
+
         }
 
+        // Удаляем предыдущие карточки
         carListItems.forEach(card => card.remove());
     })
     .catch(error => console.error('Error:', error))
     .finally(() => {
+        // Скрываем прелоудер после того, как данные загружены и карточки отрисованы
         preloader.classList.add('hidden');
         preloaderOverlay.classList.add('hidden');
         const moveTo = new MoveTo({
             duration: 1500
         });
         const target = document.getElementById('section-cars');
-        moveTo.move(target);
+        moveTo.move(target); 
     });
 }
 
 function renderCars() {
     const cols = document.querySelectorAll('.row .col');
+    console.log(price);
+    //pickup
     let selectPickup;
     let selectReturn;
-    console.log(price)
+    
     if (window.innerWidth <= 768) {
         selectPickup = document.getElementById('pickup');
         selectReturn = document.getElementById('return');
@@ -270,148 +234,58 @@ function renderCars() {
         selectReturn = document.getElementById('return-desk');
     }
     
+    // Получаем выбранные опции и их data-value
     const selectedOptionPickup = selectPickup.options[selectPickup.selectedIndex];
     const dataValuePickup = parseInt(selectedOptionPickup.getAttribute('data-value'));
     
     const selectedOptionReturn = selectReturn.options[selectReturn.selectedIndex];
     const dataValueReturn = parseInt(selectedOptionReturn.getAttribute('data-value'));
     
-    // console.log('Pickup data-value:', dataValuePickup);
-    // console.log('Return data-value:', dataValueReturn);
+    // Выводим значения в консоль
+    console.log('Pickup data-value:', dataValuePickup);
+    console.log('Return data-value:', dataValueReturn);
     
+    //total delivery
+
+    // Удаляем предыдущие карточки
     cols.forEach(col => {
         col.innerHTML = '';
     });
 
     price.forEach((car, index) => {
-        const colIndex = index % cols.length; 
-        const col = cols[colIndex]; 
-        deliveryPrice = dataValuePickup + dataValueReturn;
-
-        // Логика для полной аренды на календарный месяц
-        // const startDay = today.getDate();
-        const startMonth = today.getMonth();
-        // const endDay = defaultEndDate.getDate();
-        const endMonth = defaultEndDate.getMonth();
-        const currentYear = today.getFullYear();
-        // Получаем количество дней в месяце
-        const daysInMonth = new Date(currentYear, startMonth + 1, 0).getDate(); // Последний день месяца
-        let totalCost = 0;
-
-        // Проверка на полный календарный месяц (с 1 по последний день месяца)
-        const isFullMonth = (currentDay === 1 && finalDay === daysInMonth && startMonth === endMonth);
-
-
-        // if (isFullMonth) {
-        //     // Если аренда на полный календарный месяц
-        //     totalCost = 20000 + deliveryPrice;
-        // } else {
-        //     // Если аренда на неполный месяц
-        //     totalCost = rentDays * (seasonType === 'lowSeason' ? car.lowSeasonPrice : 
-        //                             seasonType === 'highSeason' ? car.highSeasonPrice : 
-        //                             car.extremeSeasonPrice) + deliveryPrice;
-        // }
-        let startPrice = 0;
-        let rentPrice = 0;
-        let forMonth = false;
-        let moreThanMonth = false;
-        if (seasonType === 'lowSeason') {
-            startPrice = car.lowSeasonPrice;
-            rentPrice = startPrice;
-            if (rentDays <= 5) {
-                rentPrice = rentPrice;
-            }
-            if (rentDays > 5 && rentDays <= 7) {
-                rentPrice -= 100;
-            }
-            if (rentDays > 7 && rentDays <= 10) {
-                rentPrice -= 200;
-            }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 300;
-            }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 300;
-            }
-            if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
-                rentPrice = car.lowMonthPrice;
-                forMonth = true;
-            }
-            if (rentDays > daysInCurrentMonth) {
-                rentPrice = 'Цена по запросу'
-                moreThanMonth = true;
-            }
-        }
-        if (seasonType === 'highSeason') {
-            startPrice = car.lowSeasonPrice;
-            rentPrice = startPrice;
-            if (rentDays <= 10) {
-                rentPrice = rentPrice;
-            }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 100;
-            }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 100;
-            }
-            if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
-                rentPrice = car.highMonthPrice;
-                forMonth = true;
-            }
-            if (rentDays > daysInCurrentMonth) {
-                rentPrice = 'Цена по запросу';
-                moreThanMonth = true;
-            }
-        }
-        if (seasonType === 'extremeSeason') {
-            startPrice = car.lowSeasonPrice;
-            rentPrice = startPrice;
-            if (rentDays <= 10) {
-                rentPrice = rentPrice;
-            }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 100;
-            }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 100;
-            }
-            if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
-                rentPrice = car.highMonthPrice;
-                forMonth = true;
-            }
-            if (rentDays > daysInCurrentMonth) {
-                rentPrice = 'Цена по запросу';
-                moreThanMonth = true;
-            }
-        }
-        // <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
+        const colIndex = index % cols.length; // Вычисляем индекс колонки
+        const col = cols[colIndex]; // Получаем колонку
+         deliveryPrice = dataValuePickup + dataValueReturn;
         const markup = `
             <div class="entry">
                 <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
                 <div class="content content-finder">
                     <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
-                    <p class="initial-price"><span>${!moreThanMonth ? rentPrice : '- '}฿</span>/${!moreThanMonth ? 'сутки' : ''}</p>
-                    <p class="total-price"><span></span>${!moreThanMonth ? !forMonth ? rentPrice * rentDays + deliveryPrice : rentPrice + deliveryPrice : ''}${!moreThanMonth ? `฿ итого` : 'Цена по запросу'}</p>
+                    <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
+                    <p class="total-price"><span></span>${parseInt(seasonType === 'lowSeason' ? car.lowSeasonPrice * rentDays : seasonType === 'highSeason' ? car.highSeasonPrice * rentDays : seasonType === 'extremeSeason' ? rentDays * car.extremeSeasonPrice : 0) + deliveryPrice}฿ итого</p>
                     <button class="button open-popup">Оставить заявку</button>
                 </div>
             </div>
         `;
         
-        col.insertAdjacentHTML('beforeend', markup);
+        col.innerHTML += markup; // Добавляем карточку к колонке
     });
 }
-
-
-
-
-
-
+// Получаем элемент select
 const selectElement = document.getElementById('pickup');
 
+// Добавляем обработчик события изменения
 selectElement.addEventListener('change', function() {
+    // Получаем выбранный option
     const selectedOption = selectElement.options[selectElement.selectedIndex];
+    
+    // Получаем значение атрибута data-value
     const dataValue = selectedOption.getAttribute('data-value');
+
+    // Выводим значение в консоль или сохраняем в переменную
     console.log(dataValue);
+    // Можно сохранить в переменную
+    // let myDataValue = dataValue;
 });
 
 
