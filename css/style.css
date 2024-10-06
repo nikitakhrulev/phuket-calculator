@@ -32,6 +32,7 @@ Author URL : https://themeforest.net/user/rabonadev
 	import fonts
 ===================*/
 @import url('https://fonts.googleapis.com/css?family=Muli:400,600,700,800|Playfair+Display:400,700,900|Roboto+Condensed:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import 'css/modals.css';
 
 /*===================
@@ -287,7 +288,7 @@ p {
 @media (min-width: 768px) {
 	.slider-slick .slider-entry {
 		position: relative;
-		height: 500px;
+		height: 566px;
 	}
 }
 
@@ -312,7 +313,7 @@ p {
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	top: 20%;
+	top: 80px;
 	color: #fff;
 	z-index: 8;
 	overflow-wrap: break-word;
@@ -2009,23 +2010,26 @@ color: #fff
 }
 
 .image-title {
-	font-family: 'Cuprum', sans-serif;
+	font-family: 'Inter', sans-serif;
 	color: #fff;
+	font-weight: 600;
 	font-size: 40px;
 	/* margin-top: 50px; */
-	margin-bottom: 40px;
-	text-transform: capitalize;
+	margin-bottom: 60px;
 }
 
 .image-subtitle {
 	display: block;
 	text-align: center;
-	font-style: italic;
-	font-size: 16px;
-	margin-top: 30px;
-	font-family: 'Merriweather', serif;
+	font-weight: 400;
+	font-size: 25px;
+	margin-top: 46px;
+	font-family: 'Inter', serif;
+	line-height: 40px;
 }
-
+.image-subtitle p {
+	line-height: 40px;
+}
 .panel-control-left {
 	z-index: 1000;
 	position: relative;
@@ -2523,6 +2527,7 @@ body.popup-open {
 .calculator__wrapper {
 	background-color: #fff;
 	border-radius: 30px;
+	font-family: "Open Sans", sans-serif;
 }
 .calculator__content {
 	padding: 30px 45px 40px;
@@ -2557,7 +2562,18 @@ body.popup-open {
 	padding: 0 8px;
 	color: rgba(23, 29, 35, 1);
 	margin-top: 6px;
-	/* max-width: 268px */
+	/* max-width: 208px */
+	width: 94%;
+}
+@media only screen and (max-width: 1250px) {
+	#datepicker {
+		max-width: 150px;
+	}
+}
+@media only screen and (max-width: 1230px) {
+	#datepicker {
+		max-width: 140px;
+	}
 }
 .calculator__input .select-wrapper .select-dropdown {
 	margin: 0;
@@ -2588,6 +2604,9 @@ body.popup-open {
 	line-height: 16px;
 	text-align: left;
 	margin-top: 4px;
+	bottom: 0;
+    left: 0;
+    transform: translate(0px, 20px);
 }
 .easepick-wrapper {
 	position: fixed!important;
@@ -2874,7 +2893,8 @@ body.popup-open {
 	height: 24px;
 	position: absolute;
 	top: 37px;
-	left: 90%
+	left: 90%;
+	pointer-events: none;
 }
 /* .calculator__input-date {
 	content: '';

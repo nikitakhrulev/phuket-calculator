@@ -2,7 +2,7 @@ let rentDays = 0;
 let rentMonth = '';
 let seasonType = '';
 let deliveryPrice = 0;
-let today = new Date();  
+let today = new Date();
 let defaultEndDate = new Date(); 
 let currentDay = 0;
 let finalDay = 0;
@@ -24,7 +24,15 @@ const seasonByMonth = {
     'ноября': { type: 'highSeason', minDays: { standard: 7, premium: 7 } },
     'декабря': { minDays: { standard: 7, premium: 10 } }
 };
-
+//setForm
+document.addEventListener('DOMContentLoaded', setForm)
+function setForm() {
+    if (window.innerWidth <= 768) {
+        calculatorForm.remove()
+    } else {
+        calculatorMobileForm.remove()
+    }
+}
 const totalPriceLine = document.querySelectorAll('.total-price');
 const calculatorForm = document.querySelector('.calculator__desktop');
 const calculatorMobileForm = document.querySelector('.calculator__mobile');
@@ -41,19 +49,20 @@ document.addEventListener('DOMContentLoaded', setCalendar);
 
 function setCalendar() {
     today = new Date(); 
+    today.setDate(today.getDate() + 1); // + 1 day
     defaultEndDate = new Date();
-    defaultEndDate.setDate(today.getDate() + 14);  
-
+    const startDay = (today.getDate()); //start day
+    // defaultEndDate.setDate(today.getDate() + 14);  // was before
+    defaultEndDate.setDate(startDay + 15)
     const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-    const startDay = today.getDate();
-    const startMonth = months[today.getMonth()];
+    const startMonth = months[today.getMonth()]; 
     const endDay = defaultEndDate.getDate();
     const endMonth = months[defaultEndDate.getMonth()];
     const year = today.getFullYear();
     daysInCurrentMonth = new Date(year, today.getMonth() + 1, 0).getDate();
-    console.log(daysInCurrentMonth)
-    const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24)) + 1;  
-
+    // const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24)) + 1; was before  
+    const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24))
+    console.log(days)
     if (window.innerWidth <= 768) {
         const picker = new easepick.create({
             element: document.getElementById('datepicker-mobile'),
@@ -63,7 +72,7 @@ function setCalendar() {
             ],
             zIndex: 99999,
             lang: "ru-RU",
-            plugins: ['RangePlugin'],
+            plugins: ['RangePlugin', 'LockPlugin'],
             RangePlugin: {
                 tooltipNumber(num) {
                     return num - 1;
@@ -129,7 +138,7 @@ function setCalendar() {
             ],
             zIndex: 99999,
             lang: "ru-RU",
-            plugins: ['RangePlugin'],
+            plugins: ['RangePlugin', 'LockPlugin'],
             RangePlugin: {
                 tooltipNumber(num) {
                     return num - 1;
@@ -139,16 +148,23 @@ function setCalendar() {
                     other: 'ночей',
                 },
             },
-            setup(picker) {
-                picker.setDateRange(today, defaultEndDate);
+            LockPlugin: {
+                minDate: today,  // Блокировка дат до сегодняшнего дня
+                minDays: 1,
+               
+            },
 
+            setup(picker) {
+                // picker.setDateRange(today, defaultEndDate);
+
+                picker.setDateRange(today, defaultEndDate);
+                console.log(today)
                 let dateRangeText;
                 if (startMonth === endMonth) {
                     dateRangeText = `${startDay}-${endDay} ${startMonth} ${year}`;
                 } else {
                     dateRangeText = `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`;
                 }
-
                 document.getElementById('datepicker').value = dateRangeText;
                 document.getElementById('days-count').textContent = `${days} дней`;
                 currentMonth = months[today.getMonth()];
@@ -166,14 +182,16 @@ function setCalendar() {
                     seasonType = seasonByMonth[startMonth].type; // Для других месяцев
                 }
                 console.log(seasonType)
-                
+                          
                 picker.on('select', (evt) => {
                     const startDate = evt.detail.start;
                     const endDate = evt.detail.end;
-
+                    console.log(startDate)
                     const startDay = startDate.getDate();
+                    console.log(startDay)
                     currentDay = startDay;
                     const endDay = endDate.getDate();
+                    console.log(endDay)
                     finalDay = endDay;
                     const startMonth = months[startDate.getMonth()];
                     console.log(startMonth)
@@ -203,6 +221,17 @@ function setCalendar() {
                     const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
                     document.getElementById('days-count').textContent = `${days} ${days === 1 ? 'день' : 'дней'}`;
                     rentDays = days;
+                });
+                picker.on('select', (evt) => {
+                    console.log('Change event triggered', evt.detail);
+                    const startDate = evt.detail.start;
+                
+                    if (startDate) {
+                        const startMonth = startDate.getMonth();
+                        console.log(`Start month: ${startMonth}`); // Логируем номер месяца
+                    } else {
+                        console.log('Start date is null'); // Если дата не выбрана
+                    }
                 });
             }
         });
@@ -331,7 +360,7 @@ function renderCars() {
                 rentPrice -= 300;
             }
             if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 300;
+                rentPrice -= 400;
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
                 rentPrice = car.lowMonthPrice;
@@ -343,7 +372,7 @@ function renderCars() {
             }
         }
         if (seasonType === 'highSeason') {
-            startPrice = car.lowSeasonPrice;
+            startPrice = car.highSeasonPrice;
             rentPrice = startPrice;
             if (rentDays <= 10) {
                 rentPrice = rentPrice;
@@ -352,7 +381,7 @@ function renderCars() {
                 rentPrice -= 100;
             }
             if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 100;
+                rentPrice -= 200;
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
                 rentPrice = car.highMonthPrice;
@@ -364,7 +393,7 @@ function renderCars() {
             }
         }
         if (seasonType === 'extremeSeason') {
-            startPrice = car.lowSeasonPrice;
+            startPrice = car.extremeSeasonPrice;
             rentPrice = startPrice;
             if (rentDays <= 10) {
                 rentPrice = rentPrice;
@@ -373,7 +402,7 @@ function renderCars() {
                 rentPrice -= 100;
             }
             if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 100;
+                rentPrice -= 200;
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
                 rentPrice = car.highMonthPrice;
@@ -384,18 +413,24 @@ function renderCars() {
                 moreThanMonth = true;
             }
         }
+        console.log(forMonth)
         // <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
         const markup = `
-            <div class="entry">
-                <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
-                <div class="content content-finder">
-                    <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
-                    <p class="initial-price"><span>${!moreThanMonth ? rentPrice : '- '}฿</span>/${!moreThanMonth ? 'сутки' : ''}</p>
-                    <p class="total-price"><span></span>${!moreThanMonth ? !forMonth ? rentPrice * rentDays + deliveryPrice : rentPrice + deliveryPrice : ''}${!moreThanMonth ? `฿ итого` : 'Цена по запросу'}</p>
-                    <button class="button open-popup">Оставить заявку</button>
-                </div>
-            </div>
-        `;
+    <div class="entry">
+        <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
+        <div class="content content-finder">
+            <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
+            ${!moreThanMonth  ? `
+                <p class="initial-price">
+                    <span>${rentPrice}฿</span>/${'сутки'}
+                </p>` : ''}
+            ${!forMonth ? `<p class="total-price">
+                    <span></span>${!moreThanMonth ? !forMonth ? rentPrice * rentDays + deliveryPrice : rentPrice + deliveryPrice : ''}${!moreThanMonth ? `฿ итого` : 'Цена по запросу'}
+                </p>` : ''}
+            <button class="button open-popup">Оставить заявку</button>
+        </div>
+    </div>
+`;
         
         col.insertAdjacentHTML('beforeend', markup);
     });
@@ -407,14 +442,11 @@ function renderCars() {
 
 
 const selectElement = document.getElementById('pickup');
-
 selectElement.addEventListener('change', function() {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const dataValue = selectedOption.getAttribute('data-value');
     console.log(dataValue);
 });
-
-
 
 
 
