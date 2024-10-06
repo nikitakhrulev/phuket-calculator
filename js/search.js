@@ -29,13 +29,17 @@ document.addEventListener('DOMContentLoaded', setForm)
 function setForm() {
     if (window.innerWidth <= 768) {
         calculatorForm.remove()
+        descrDesc.remove();
     } else {
         calculatorMobileForm.remove()
+        descrMobile.remove();
     }
 }
 const totalPriceLine = document.querySelectorAll('.total-price');
 const calculatorForm = document.querySelector('.calculator__desktop');
 const calculatorMobileForm = document.querySelector('.calculator__mobile');
+const descrMobile = document.querySelector('.image-desciption__mobile');
+const descrDesc = document.querySelector('.image-subtitle-desktop');
 const rooms = document.querySelector('.rooms'); 
 const carListItems = rooms ? rooms.querySelectorAll('.entry') : null; 
 
