@@ -2856,10 +2856,25 @@ body.popup-open {
 		width: 20px;
 		height: 20px;
 		padding: 0 20px;
-		transform: translate(110px, 17px);
+		left: 30%;
+		transform: translate(50px, 18px);
 	}
 }
-
+ @media only screen and (max-width: 630px) {
+	.calculator__btn::before {
+		left: 25%;
+	}
+}
+@media only screen and (max-width: 460px) {
+	.calculator__btn::before {
+		left: 20%;
+	}
+}
+@media only screen and (max-width: 390px) {
+	.calculator__btn::before {
+		left: 15%;
+	}
+}
 .mobile-pickup__wrapper input {
 	text-align: start;
 }
@@ -2923,4 +2938,7 @@ body.popup-open {
 }
 .calculator__input-place input::placeholder {
 	width: 10px;
+}
+.card-warning {
+	color: red;
 }

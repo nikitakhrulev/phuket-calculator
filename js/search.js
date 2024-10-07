@@ -66,7 +66,6 @@ function setCalendar() {
     daysInCurrentMonth = new Date(year, today.getMonth() + 1, 0).getDate();
     // const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24)) + 1; was before  
     const days = Math.ceil((defaultEndDate - today) / (1000 * 60 * 60 * 24))
-    console.log(days)
     if (window.innerWidth <= 768) {
         const picker = new easepick.create({
             element: document.getElementById('datepicker-mobile'),
@@ -86,13 +85,17 @@ function setCalendar() {
                     other: 'ночей',
                 },
             },
+            LockPlugin: {
+                minDate: today,  // Блокировка дат до сегодняшнего дня
+                minDays: 1,
+               
+            },
             setup(picker) {
                 picker.setDateRange(today, defaultEndDate);
 
                 const pickupDate = document.querySelector('.datepicker-date-pickup input');
                 const returnDate = document.querySelector('.datepicker-date-return input');
                 const daysCount = document.querySelector('.days-count__mobile');
-
                 pickupDate.style.color = '#000';
                 returnDate.style.color = '#000';
                 daysCount.style.display = 'block';
@@ -100,6 +103,16 @@ function setCalendar() {
                 returnDate.value = `${endDay} ${endMonth}`;
                 daysCount.textContent = `${days} дней`;
                 rentDays = days;
+                if (startMonth === 'декабря') {
+                    if (startDay >= 20) {
+                        seasonType = 'extremeSeason'; // С 20 декабря и позже
+                    } else {
+                        seasonType = 'highSeason'; // До 20 декабря
+                    }
+                } else {
+                    seasonType = seasonByMonth[startMonth].type; // Для других месяцев
+                }
+                console.log(seasonType)
                 picker.on('select', (evt) => {
                     const startDate = evt.detail.start;
                     const endDate = evt.detail.end;
@@ -130,6 +143,8 @@ function setCalendar() {
                     const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
                     daysCount.textContent = `${days} ${days === 1 ? 'день' : 'дней'}`;
                     rentDays = days;
+                    console.log(rentDays)
+                    console.log(seasonType)
                 });
             }
         });
@@ -190,15 +205,11 @@ function setCalendar() {
                 picker.on('select', (evt) => {
                     const startDate = evt.detail.start;
                     const endDate = evt.detail.end;
-                    console.log(startDate)
                     const startDay = startDate.getDate();
-                    console.log(startDay)
                     currentDay = startDay;
                     const endDay = endDate.getDate();
-                    console.log(endDay)
                     finalDay = endDay;
                     const startMonth = months[startDate.getMonth()];
-                    console.log(startMonth)
                     const endMonth = months[endDate.getMonth()];
                     const year = startDate.getFullYear();
                     if (startMonth === 'декабря') {
@@ -242,59 +253,79 @@ function setCalendar() {
     }
 }
 
-let price = [];
+//first load flag
+let isFirstLoad = true;
 
+let price = [];
 function changePrices(evt) {
-    evt.preventDefault();
+    if (evt) evt.preventDefault(); // Предотвращаем дефолтное действие только если evt существует
     price = [];
+    lessThanMinimum = false;
     const preloader = document.querySelector('.preloader');
     const preloaderOverlay = document.querySelector('.preloader-overlay');
 
-    preloader.classList.remove('hidden');
-    preloaderOverlay.classList.remove('hidden');
-    
-    fetch('https://phuket-cars-default-rtdb.asia-southeast1.firebasedatabase.app/.json')
-    .then(response => response.json())
-    .then(data => {
-        if (data.cars) {
-            data.cars.forEach(car => {
-                const carObject = {
-                    id: car.id,
-                    name: car.name,
-                    lowSeasonPrice: car.lowSeasonPrice,
-                    highSeasonPrice: car.highSeasonPrice,
-                    extremeSeasonPrice: car.extremeSeasonPrice,
-                    carUrl: car.carUrl,
-                    imgUrl: car.imgUrl,
-                    category: car.category, 
-                    lowMonthPrice: car.lowMonthPrice,
-                    highMonthPrice: car.highMonthPrice,
-                    extremeMonthPrice: car.extremeMonthPrice,
-                };
-                price.push(carObject);
-            });
-            renderCars(); 
-        }
+    // Показываем прелоудер всегда, если evt существует
+    if (evt) {
+        preloader.classList.remove('hidden');
+        preloaderOverlay.classList.remove('hidden');
+    }
 
-        carListItems.forEach(card => card.remove());
-    })
-    .catch(error => console.error('Error:', error))
-    .finally(() => {
-        preloader.classList.add('hidden');
-        preloaderOverlay.classList.add('hidden');
-        const moveTo = new MoveTo({
-            duration: 1500
+    fetch('https://phuket-cars-default-rtdb.asia-southeast1.firebasedatabase.app/.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data.cars) {
+                data.cars.forEach(car => {
+                    const carObject = {
+                        id: car.id,
+                        name: car.name,
+                        lowSeasonPrice: car.lowSeasonPrice,
+                        highSeasonPrice: car.highSeasonPrice,
+                        extremeSeasonPrice: car.extremeSeasonPrice,
+                        carUrl: car.carUrl,
+                        imgUrl: car.imgUrl,
+                        category: car.category, 
+                        lowMonthPrice: car.lowMonthPrice,
+                        highMonthPrice: car.highMonthPrice,
+                        extremeMonthPrice: car.extremeMonthPrice,
+                    };
+                    price.push(carObject);
+                });
+                renderCars(); 
+            }
+
+            const carListItems = document.querySelectorAll('.your-card-selector'); // Замените на ваш селектор
+            carListItems.forEach(card => card.remove());
+        })
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            // Прячем прелоудер в любом случае
+            preloader.classList.add('hidden');
+            preloaderOverlay.classList.add('hidden');
+            const moveTo = new MoveTo({ duration: 1500 });
+            const target = document.getElementById('section-cars');
+            if (isFirstLoad) {
+                isFirstLoad = false; 
+            } else {
+                moveTo.move(target);
+            }
         });
-        const target = document.getElementById('section-cars');
-        moveTo.move(target);
-    });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    changePrices(new Event('change')); // Передаем событие при первой загрузке, чтобы показать прелоудер
+    // isFirstLoad = false;
+});
+
+
+//флаг - меньше ли количество выбранных дней, чем допустимо
+let lessThanMinimum = false;
+
+
 
 function renderCars() {
     const cols = document.querySelectorAll('.row .col');
     let selectPickup;
     let selectReturn;
-    console.log(price)
     if (window.innerWidth <= 768) {
         selectPickup = document.getElementById('pickup');
         selectReturn = document.getElementById('return');
@@ -344,11 +375,17 @@ function renderCars() {
         //                             seasonType === 'highSeason' ? car.highSeasonPrice : 
         //                             car.extremeSeasonPrice) + deliveryPrice;
         // }
+        let minRentDays = 0;
         let startPrice = 0;
         let rentPrice = 0;
         let forMonth = false;
         let moreThanMonth = false;
         if (seasonType === 'lowSeason') {
+            minRentDays = 4;
+            if (rentDays < minRentDays) {
+                lessThanMinimum = true;
+                rentDays = minRentDays;
+            }
             startPrice = car.lowSeasonPrice;
             rentPrice = startPrice;
             if (rentDays <= 5) {
@@ -376,6 +413,11 @@ function renderCars() {
             }
         }
         if (seasonType === 'highSeason') {
+            minRentDays = 7;
+            if (rentDays < minRentDays) {
+                lessThanMinimum = true;
+                rentDays = minRentDays;
+            }
             startPrice = car.highSeasonPrice;
             rentPrice = startPrice;
             if (rentDays <= 10) {
@@ -397,6 +439,11 @@ function renderCars() {
             }
         }
         if (seasonType === 'extremeSeason') {
+            minRentDays = 7;
+            if (rentDays < minRentDays) {
+                lessThanMinimum = true;
+                rentDays = minRentDays;
+            }
             startPrice = car.extremeSeasonPrice;
             rentPrice = startPrice;
             if (rentDays <= 10) {
@@ -417,20 +464,22 @@ function renderCars() {
                 moreThanMonth = true;
             }
         }
-        console.log(forMonth)
         // <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
         const markup = `
-    <div class="entry">
+    <div class="entry" data-id="${car.id}">
         <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
         <div class="content content-finder">
             <h5 class="car-name" data-name="${car.name}">${car.name}</h5>
-            ${!moreThanMonth  ? `
+            ${!moreThanMonth && !forMonth ? `
                 <p class="initial-price">
                     <span>${rentPrice}฿</span>/${'сутки'}
                 </p>` : ''}
             ${!forMonth ? `<p class="total-price">
                     <span></span>${!moreThanMonth ? !forMonth ? rentPrice * rentDays + deliveryPrice : rentPrice + deliveryPrice : ''}${!moreThanMonth ? `฿ итого` : 'Цена по запросу'}
-                </p>` : ''}
+                </p>` : !moreThanMonth ? `${rentPrice + deliveryPrice}฿ итого` : ''}
+                ${
+                   lessThanMinimum ? `<span class="card-warning">*Цена за минимальный срок аренды - ${minRentDays} суток</span>` : ''
+                }
             <button class="button open-popup">Оставить заявку</button>
         </div>
     </div>
@@ -445,6 +494,10 @@ function renderCars() {
 
 
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     changePrices(); // Вызываем без события, чтобы данные загружались без прелоадера
+// });
+
 const selectElement = document.getElementById('pickup');
 selectElement.addEventListener('change', function() {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -457,3 +510,18 @@ selectElement.addEventListener('change', function() {
 //moveTo
 const moveTo = new MoveTo();
 const target = document.getElementById('section-cars');
+
+// Получаем все элементы с классом 'col'
+// Получаем все элементы с классом 'entry'
+const entries = document.querySelectorAll('.entry');
+
+// Проверяем каждый элемент на наличие атрибута 'data-id'
+entries.forEach(entry => {
+    const carId = entry.getAttribute('data-id'); // Получаем значение атрибута 'data-id'
+    
+    if (carId) {
+        console.log('Элемент с car-id найден:', carId);
+    } else {
+        console.log('car-id не найден в элементе:', entry);
+    }
+});
