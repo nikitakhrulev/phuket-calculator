@@ -312,16 +312,11 @@ function changePrices(evt) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    changePrices(new Event('change')); // Передаем событие при первой загрузке, чтобы показать прелоудер
-    // isFirstLoad = false;
+    changePrices(new Event('change')); 
+
 });
-
-
 //флаг - меньше ли количество выбранных дней, чем допустимо
 let lessThanMinimum = false;
-
-
-
 function renderCars() {
     const cols = document.querySelectorAll('.row .col');
     let selectPickup;
@@ -333,16 +328,10 @@ function renderCars() {
         selectPickup = document.getElementById('pickup-desk');
         selectReturn = document.getElementById('return-desk');
     }
-    
     const selectedOptionPickup = selectPickup.options[selectPickup.selectedIndex];
     const dataValuePickup = parseInt(selectedOptionPickup.getAttribute('data-value'));
-    
     const selectedOptionReturn = selectReturn.options[selectReturn.selectedIndex];
     const dataValueReturn = parseInt(selectedOptionReturn.getAttribute('data-value'));
-    
-    // console.log('Pickup data-value:', dataValuePickup);
-    // console.log('Return data-value:', dataValueReturn);
-    
     cols.forEach(col => {
         col.innerHTML = '';
     });
@@ -351,30 +340,13 @@ function renderCars() {
         const colIndex = index % cols.length; 
         const col = cols[colIndex]; 
         deliveryPrice = dataValuePickup + dataValueReturn;
-
-        // Логика для полной аренды на календарный месяц
-        // const startDay = today.getDate();
         const startMonth = today.getMonth();
-        // const endDay = defaultEndDate.getDate();
         const endMonth = defaultEndDate.getMonth();
         const currentYear = today.getFullYear();
-        // Получаем количество дней в месяце
         const daysInMonth = new Date(currentYear, startMonth + 1, 0).getDate(); // Последний день месяца
         let totalCost = 0;
-
-        // Проверка на полный календарный месяц (с 1 по последний день месяца)
         const isFullMonth = (currentDay === 1 && finalDay === daysInMonth && startMonth === endMonth);
 
-
-        // if (isFullMonth) {
-        //     // Если аренда на полный календарный месяц
-        //     totalCost = 20000 + deliveryPrice;
-        // } else {
-        //     // Если аренда на неполный месяц
-        //     totalCost = rentDays * (seasonType === 'lowSeason' ? car.lowSeasonPrice : 
-        //                             seasonType === 'highSeason' ? car.highSeasonPrice : 
-        //                             car.extremeSeasonPrice) + deliveryPrice;
-        // }
         let minRentDays = 0;
         let startPrice = 0;
         let rentPrice = 0;
@@ -464,7 +436,6 @@ function renderCars() {
                 moreThanMonth = true;
             }
         }
-        // <p class="initial-price"><span>от ${seasonType === 'lowSeason' ? car.lowSeasonPrice: seasonType === 'highSeason' ? car.highSeasonPrice: seasonType === 'extremeSeason' ? car.extremeSeasonPrice : 0}฿</span>/сутки</p>
         const markup = `
     <div class="entry" data-id="${car.id}">
         <a href="/${car.carUrl}"><img src="${car.imgUrl}" alt="${car.name}"></a>
@@ -488,16 +459,6 @@ function renderCars() {
         col.insertAdjacentHTML('beforeend', markup);
     });
 }
-
-
-
-
-
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     changePrices(); // Вызываем без события, чтобы данные загружались без прелоадера
-// });
-
 const selectElement = document.getElementById('pickup');
 selectElement.addEventListener('change', function() {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -510,18 +471,3 @@ selectElement.addEventListener('change', function() {
 //moveTo
 const moveTo = new MoveTo();
 const target = document.getElementById('section-cars');
-
-// Получаем все элементы с классом 'col'
-// Получаем все элементы с классом 'entry'
-const entries = document.querySelectorAll('.entry');
-
-// Проверяем каждый элемент на наличие атрибута 'data-id'
-entries.forEach(entry => {
-    const carId = entry.getAttribute('data-id'); // Получаем значение атрибута 'data-id'
-    
-    if (carId) {
-        console.log('Элемент с car-id найден:', carId);
-    } else {
-        console.log('car-id не найден в элементе:', entry);
-    }
-});
