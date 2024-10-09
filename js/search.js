@@ -30,9 +30,11 @@ function setForm() {
     if (window.innerWidth <= 768) {
         calculatorForm.remove()
         descrDesc.remove();
+        calculatorMobileForm.classList.remove('hidden')
     } else {
         calculatorMobileForm.remove()
         descrMobile.remove();
+        calculatorForm.classList.remove('hidden')
     }
 }
 const totalPriceLine = document.querySelectorAll('.total-price');
@@ -353,7 +355,7 @@ function renderCars() {
         let forMonth = false;
         let moreThanMonth = false;
         if (seasonType === 'lowSeason') {
-            minRentDays = 4;
+            minRentDays = 3;
             if (rentDays < minRentDays) {
                 lessThanMinimum = true;
                 rentDays = minRentDays;
@@ -471,3 +473,5 @@ selectElement.addEventListener('change', function() {
 //moveTo
 const moveTo = new MoveTo();
 const target = document.getElementById('section-cars');
+
+

@@ -94,11 +94,8 @@
 			<div class="overlay"></div>
 			<div class="caption">
 				<div class="container">
-					<p class="image-title">Аренда авто на&nbsp;Пхукете</p>
+					<h1 class="image-title">Аренда автомобиля на&nbsp;Пхукете</h1>
 					<p class="image-desciption__mobile">
-						Бесплатная доставка в аэропорт <br>
-						Кредитная карта не нужна <br>
-						Машины застрахованы
 					</p>
 					<div class="calculator__wrapper">
 						<div class="calculator__content">
@@ -118,7 +115,7 @@
 									</div>
 							</div>
 							<!-- mobile-form -->
-							<form class="calculator__form calculator__mobile">
+							<form class="calculator__form calculator__mobile hidden">
 								<div class="calculator__input-mobile">
 									<div class="mobile-pickup__wrapper">
 										<label for="mobile-pickup">Получение</label>
@@ -186,10 +183,10 @@
 								</div>
 							</form>
 							<!-- desktop form -->
-							<form class="calculator__form calculator__desktop">
+							<form class="calculator__form calculator__desktop hidden">
 								<div class="calculator__input calculator__input-place desktop-pickup__wrapper">
 									<label for="pickup">Получение</label>
-									<div>
+									<div class="desktop-calculator-container-pickup">
 										<select name="pickup1" id="pickup-desk">
 											<option data-value="0" value="Airport">Airport</option>
 											<option data-value="600" value="Ao Po">Ao Po</option>
@@ -215,27 +212,29 @@
 								</div>
 								<div class="calculator__input calculator__input-place desktop-return__wrapper">
 									<label for="return">Возврат</label>
-									<select name="return1" id="return-desk">
-										<option data-value="0" value="Airport">Airport</option>
-										<option data-value="600" value="Ao Po">Ao Po</option>
-										<option data-value="400" value="Bangtao">Bangtao</option>
-										<option data-value="400" value="Kamala">Kamala</option>
-										<option data-value="600" value="Karon">Karon</option>
-										<option data-value="600" value="Kata">Kata</option>
-										<option data-value="600" value="Kathu">Kathu</option>
-										<option data-value="400" value="Laguna">Laguna</option>
-										<option data-value="200" value="Maikhao">Maikhao</option>
-										<option data-value="200" value="Naithon">Naithon</option>
-										<option data-value="600" value="Nai Harn">Nai Harn</option>
-										<option data-value="600" value="Cape Panwa">Cape Panwa</option>
-										<option data-value="600" value="Patong">Patong</option>
-										<option data-value="600" value="Phuket-Town">Phuket-Town</option>
-										<option data-value="600" value="Rawai">Rawai</option>
-										<option data-value="600" value="Rassada">Rassada</option>
-										<option data-value="400" value="Surin">Surin</option>
-										<option data-value="600" value="Thalang">Thalang</option>
-										<option data-value="600" value="Chalong">Chalong</option>
-									</select>
+									<div class="desktop-calculator-container-return">
+										<select name="return1" id="return-desk">
+											<option data-value="0" value="Airport">Airport</option>
+											<option data-value="600" value="Ao Po">Ao Po</option>
+											<option data-value="400" value="Bangtao">Bangtao</option>
+											<option data-value="400" value="Kamala">Kamala</option>
+											<option data-value="600" value="Karon">Karon</option>
+											<option data-value="600" value="Kata">Kata</option>
+											<option data-value="600" value="Kathu">Kathu</option>
+											<option data-value="400" value="Laguna">Laguna</option>
+											<option data-value="200" value="Maikhao">Maikhao</option>
+											<option data-value="200" value="Naithon">Naithon</option>
+											<option data-value="600" value="Nai Harn">Nai Harn</option>
+											<option data-value="600" value="Cape Panwa">Cape Panwa</option>
+											<option data-value="600" value="Patong">Patong</option>
+											<option data-value="600" value="Phuket-Town">Phuket-Town</option>
+											<option data-value="600" value="Rawai">Rawai</option>
+											<option data-value="600" value="Rassada">Rassada</option>
+											<option data-value="400" value="Surin">Surin</option>
+											<option data-value="600" value="Thalang">Thalang</option>
+											<option data-value="600" value="Chalong">Chalong</option>
+										</select>
+									</div>
 								</div>
 								<!-- <div class="calculator__input">
 									<label for="date">Даты аренды</label>
@@ -256,9 +255,6 @@
 						</div>
 					</div>
 					<p class="image-subtitle image-subtitle-desktop">
-					Бесплатная доставка в аэропорт. <br>
-					Кредитная карта не нужна.<br>
-					Машины застрахованы.<br>
 					</p>
 				</div>
 			</div>
@@ -649,7 +645,9 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script src="js/custom.js"></script>
-	<script src="./js/modals.js"></script>
+	<script src="js/selects.js"></script>
+	<script src="js/modals.js"></script>
+	<script src="js/search.js"></script>
 <!-- Yandex.Metrika counter -->
 <script defer="defer" type="text/javascript" >
     (function (d, w, c) {

@@ -71,7 +71,7 @@ h6 {
 }
 
 h1 {
-	font-size: 36px !important;
+	font-size: 36px;
 }
 
 h2 {
@@ -2010,21 +2010,21 @@ color: #fff
 }
 
 .image-title {
-	font-family: 'Inter', sans-serif;
+	font-family: 'Cuprum', sans-serif;
 	color: #fff;
 	font-weight: 600;
 	font-size: 40px;
 	/* margin-top: 50px; */
-	margin-bottom: 60px;
+	margin-bottom: 46px;
 }
 
 .image-subtitle {
 	display: block;
 	text-align: center;
 	font-weight: 400;
-	font-size: 25px;
+	font-size: 16px;
 	margin-top: 46px;
-	font-family: 'Inter', serif;
+	font-family: 'Merriweather', serif;
 	line-height: 40px;
 }
 .image-subtitle p {
@@ -2519,14 +2519,14 @@ body.popup-open {
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	font-size: 13.33px;
+	font-size: 14.33px;
 	line-height: 20px;
 	font-weight: 500;
 	color: rgba(23, 29, 35, 1);
 }
 .calculator__wrapper {
 	background-color: #fff;
-	border-radius: 30px;
+	border-radius: 20px;
 	font-family: "Open Sans", sans-serif;
 }
 .calculator__content {
@@ -2740,18 +2740,29 @@ body.popup-open {
 .mobile-pickup__wrapper {
 	text-align: start;
 }
+.mobile-pickup__wrapper 
+.mobile-pickup__wrapper label {
+	font-size: 12px;
+}
 .mobile-return__wrapper {
 	text-align: end;
 }
 .mobile-pickup__wrapper .select-wrapper input{
 	text-align: start;
 	max-height: 24px;
+	font-size: 15px;
 	color: rgba(0, 0, 0, 1);
+	font-size: 15px!important;
 }
 .mobile-return__wrapper .select-wrapper input{
 	text-align: end;
 	max-height: 24px;
+	font-size: 15px;
 	color: rgba(0, 0, 0, 1);
+	font-size: 15px!important;
+}
+.mobile-return__wrapper label {
+	font-size: 12px;
 }
 .calculator__mobile {
 	display: none;
@@ -2769,7 +2780,7 @@ body.popup-open {
     transform: translate(-30px, 10px);
     background: rgba(244, 247, 252, 1);
     width: 61px;
-    font-size: 12px;
+    font-size: 12.5px;
     border-radius: 30px;
     color: rgba(120, 124, 127, 1);
 }
@@ -2833,19 +2844,21 @@ body.popup-open {
 	}
 	.image-title {
 		padding-top: 100px;
-		font-size: 22px;
+		font-size: 38px;
 		font-weight: 600;
-		width: 200px;
+		width: 100%;
+		max-width: 301px;
 		margin: 0 auto 25px;
 	}
 	.image-desciption__mobile {
 		display: block;
-		line-height: 18.15px;
+		line-height: 20.15px;
+		font-style: italic;
 		margin: 0;
 		font-size: 15px;
 	}
 	.slider-slick .slider-entry {
-		height: 300px;
+		height: 320px;
 	}
 	.calculator__btn::before {
 		content: '';
