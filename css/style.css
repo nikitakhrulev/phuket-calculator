@@ -2158,6 +2158,9 @@ color: #fff
 	.image-title {
 		line-height: 1;
 		font-size: 38px;
+		font-family: "Inter"!important;
+		font-weight: 600!important;
+		font-size: 22px!important;
 	}
 	.rooms .col.s6 {
 		margin-bottom: 40px;
@@ -2853,12 +2856,12 @@ body.popup-open {
 	.image-desciption__mobile {
 		display: block;
 		line-height: 20.15px;
-		font-style: italic;
 		margin: 0;
 		font-size: 15px;
+		font-family: "Inter";
 	}
 	.slider-slick .slider-entry {
-		height: 320px;
+		height: 300px;
 	}
 	.calculator__btn::before {
 		content: '';
