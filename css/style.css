@@ -2156,11 +2156,11 @@ color: #fff
 		top: 0
 	}
 	.image-title {
-		line-height: 1;
+		line-height: 1.25;
 		font-size: 38px;
 		font-family: "Inter"!important;
-		font-weight: 600!important;
-		font-size: 22px!important;
+		font-weight: 400!important;
+		font-size: 24px!important;
 	}
 	.rooms .col.s6 {
 		margin-bottom: 40px;
@@ -2734,7 +2734,19 @@ body.popup-open {
 	display: flex;
 	border: 1px solid rgba(143, 146, 149, 1);
 	border-radius: 6px;
-	padding: 5px 12px;
+	padding: 3px 12px;
+}
+.mobile-pickup__wrapper label{
+	font-size: 12.5px;
+}
+.mobile-return__wrapper label {
+	font-size: 12.5px;
+}
+.mobile-pickup__wrapper input {
+	font-size: 15px!important;
+}
+.mobile-return__wrapper input {
+	font-size: 15px!important;
 }
 .calculator__input-mobile input {
 	border-bottom: none!important;
@@ -2763,9 +2775,6 @@ body.popup-open {
 	font-size: 15px;
 	color: rgba(0, 0, 0, 1);
 	font-size: 15px!important;
-}
-.mobile-return__wrapper label {
-	font-size: 12px;
 }
 .calculator__mobile {
 	display: none;
@@ -2809,7 +2818,7 @@ body.popup-open {
 	.calculator__wrapper {
 		border-radius: 10px;
 		position: relative;
-		top: 30px;
+		top: 60px;
 		box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
 	}
 	.calculator__form {
@@ -2855,13 +2864,13 @@ body.popup-open {
 	}
 	.image-desciption__mobile {
 		display: block;
-		line-height: 20.15px;
+		line-height: 25.15px;
 		margin: 0;
-		font-size: 15px;
+		font-size: 16px;
 		font-family: "Inter";
 	}
 	.slider-slick .slider-entry {
-		height: 300px;
+		height: 340px;
 	}
 	.calculator__btn::before {
 		content: '';

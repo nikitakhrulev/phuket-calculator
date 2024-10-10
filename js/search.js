@@ -276,27 +276,17 @@ function changePrices(evt) {
         .then(response => response.json())
         .then(data => {
             if (data.cars) {
-                data.cars.forEach(car => {
-                    const carObject = {
-                        id: car.id,
-                        name: car.name,
-                        lowSeasonPrice: car.lowSeasonPrice,
-                        highSeasonPrice: car.highSeasonPrice,
-                        extremeSeasonPrice: car.extremeSeasonPrice,
-                        carUrl: car.carUrl,
-                        imgUrl: car.imgUrl,
-                        category: car.category, 
-                        lowMonthPrice: car.lowMonthPrice,
-                        highMonthPrice: car.highMonthPrice,
-                        extremeMonthPrice: car.extremeMonthPrice,
-                    };
-                    price.push(carObject);
+                data.cars.forEach(({ id, name, imgUrl, lowMonthPrice, lowSeasonPrice3, lowSeasonPrice5, lowSeasonPrice7, lowSeasonPrice10, lowSeasonPrice16, highMonthPrice, highSeasonPrice7, highSeasonPrice10, highSeasonPrice16, extremeMonthPrice, extremeSeasonPrice7, extremeSeasonPrice10, extremeSeasonPrice16}) => {
+                    price.push({
+                        id, name, imgUrl, lowMonthPrice, lowSeasonPrice3, lowSeasonPrice5, lowSeasonPrice7, lowSeasonPrice10, lowSeasonPrice16, highMonthPrice, highSeasonPrice7, highSeasonPrice10, highSeasonPrice16, extremeMonthPrice, extremeSeasonPrice7, extremeSeasonPrice10, extremeSeasonPrice16
+                    });
                 });
+                console.log(price)
+            
                 renderCars(); 
             }
 
-            const carListItems = document.querySelectorAll('.your-card-selector'); // Замените на ваш селектор
-            carListItems.forEach(card => card.remove());
+           
         })
         .catch(error => console.error('Error:', error))
         .finally(() => {
@@ -348,7 +338,7 @@ function renderCars() {
         const daysInMonth = new Date(currentYear, startMonth + 1, 0).getDate(); // Последний день месяца
         let totalCost = 0;
         const isFullMonth = (currentDay === 1 && finalDay === daysInMonth && startMonth === endMonth);
-
+        console.log(car.lowMonthPrice)
         let minRentDays = 0;
         let startPrice = 0;
         let rentPrice = 0;
@@ -360,30 +350,37 @@ function renderCars() {
                 lessThanMinimum = true;
                 rentDays = minRentDays;
             }
-            startPrice = car.lowSeasonPrice;
+            startPrice = car.lowSeasonPrice3;
             rentPrice = startPrice;
-            if (rentDays <= 5) {
+            if (rentDays <= 4) {
                 rentPrice = rentPrice;
+                console.log(rentPrice)
             }
-            if (rentDays > 5 && rentDays <= 7) {
-                rentPrice -= 100;
+            if (rentDays > 4 && rentDays <= 6) {
+                rentPrice = car.lowSeasonPrice5;
+                console.log(rentPrice)
             }
-            if (rentDays > 7 && rentDays <= 10) {
-                rentPrice -= 200;
+            if (rentDays > 6 && rentDays <= 9) {
+                rentPrice = car.lowSeasonPrice7;
+                console.log(rentPrice)
             }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 300;
+            if (rentDays > 9 && rentDays <= 15) {
+                rentPrice = car.lowSeasonPrice10;
+                console.log(rentPrice)
             }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 400;
+            if (rentDays > 15 && rentDays <= 20) {
+                rentPrice = car.lowSeasonPrice16;
+                console.log(rentPrice)
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
                 rentPrice = car.lowMonthPrice;
                 forMonth = true;
+                console.log(rentPrice)
             }
             if (rentDays > daysInCurrentMonth) {
                 rentPrice = 'Цена по запросу'
                 moreThanMonth = true;
+                console.log(rentPrice)
             }
         }
         if (seasonType === 'highSeason') {
@@ -392,16 +389,16 @@ function renderCars() {
                 lessThanMinimum = true;
                 rentDays = minRentDays;
             }
-            startPrice = car.highSeasonPrice;
+            startPrice = car.highSeasonPrice7;
             rentPrice = startPrice;
-            if (rentDays <= 10) {
+            if (rentDays <= 9) {
                 rentPrice = rentPrice;
             }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 100;
+            if (rentDays > 9 && rentDays <= 15) {
+                rentPrice = car.highSeasonPrice10;
             }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 200;
+            if (rentDays > 15 && rentDays <= 20) {
+                rentPrice = car.highSeasonPrice16;
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
                 rentPrice = car.highMonthPrice;
@@ -418,19 +415,19 @@ function renderCars() {
                 lessThanMinimum = true;
                 rentDays = minRentDays;
             }
-            startPrice = car.extremeSeasonPrice;
+            startPrice = car.extremeSeasonPrice7;
             rentPrice = startPrice;
-            if (rentDays <= 10) {
+            if (rentDays <= 9) {
                 rentPrice = rentPrice;
             }
-            if (rentDays > 10 && rentDays <= 14) {
-                rentPrice -= 100;
+            if (rentDays > 9 && rentDays <= 15) {
+                rentPrice = car.extremeSeasonPrice10;
             }
-            if (rentDays > 14 && rentDays <= 20) {
-                rentPrice -= 200;
+            if (rentDays > 15 && rentDays <= 20) {
+                rentPrice = car.extremeSeasonPrice16;
             }
             if (rentDays > 20 && rentDays <= daysInCurrentMonth) {
-                rentPrice = car.highMonthPrice;
+                rentPrice = car.extremeMonthPrice;
                 forMonth = true;
             }
             if (rentDays > daysInCurrentMonth) {
@@ -460,7 +457,27 @@ function renderCars() {
         
         col.insertAdjacentHTML('beforeend', markup);
     });
+    deleteEmptyRows()
 }
+function deleteEmptyRows() {
+    document.querySelectorAll('.row').forEach(row => {
+        const cols = row.querySelectorAll('.col');
+        let isEmpty = true;
+    
+        // Проверяем, содержит ли хотя бы один col текст или другие элементы
+        cols.forEach(col => {
+            if (col.textContent.trim() !== '' || col.children.length > 0) {
+                isEmpty = false;
+            }
+        });
+    
+        // Удаляем строку, если все колонки пусты
+        if (isEmpty) {
+            row.remove();
+        }
+    });
+}
+
 const selectElement = document.getElementById('pickup');
 selectElement.addEventListener('change', function() {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
